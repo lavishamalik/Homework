@@ -1,5 +1,6 @@
 package com.codingblocks.mynotes;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,41 +22,30 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     EditText et;
-    String input;
+
     String time;
-    ArrayList<Notes>arrayList=new ArrayList<>();
+    ArrayList<Notes> arrayList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         et = findViewById(R.id.etNote);
-        RecyclerView recyclerView=findViewById(R.id.recyclerView);
-        SharedPreferences sharedPreferences=getPreferences(MODE_PRIVATE);
-        Map<String,?>allEntries=sharedPreferences.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            Log.e("map values", entry.getKey() + ": " + entry.getValue().toString());
-            if(entry.getKey()=="NOTES")
-            {
-                TextView textView=findViewById(R.id.tvnote);
-                textView.setText((CharSequence) entry.getValue());
-            }
-            else if(entry.getKey()=="TIME")
-            {
-                TextView textView=findViewById(R.id.tvtime);
-                textView.setText((CharSequence) entry.getValue());
-            }
-        }
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+
+        arrayList= loadArray(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        final NotesAdapter notesAdapter=new NotesAdapter(arrayList);
+        final NotesAdapter notesAdapter = new NotesAdapter(arrayList);
         recyclerView.setAdapter(notesAdapter);
-        Button btnadd=findViewById(R.id.btnadd);
+        Button btnadd = findViewById(R.id.btnadd);
         btnadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String input=et.getText().toString();
+                String input = et.getText().toString();
                 time = String.valueOf(System.currentTimeMillis());
-                arrayList.add(new Notes(input,time));
+                arrayList.add(new Notes(input, time));
                 notesAdapter.notifyDataSetChanged();
                 et.setText("");
             }
@@ -64,11 +54,43 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        SharedPreferences sharedPreferences=getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("NOTES", et.getText().toString());
-        editor.putString("TIME",time);
-        editor.apply();
+        saveArray();
         super.onStop();
     }
+
+
+    public void saveArray() {
+        SharedPreferences sp = getSharedPreferences("my_pref", MODE_PRIVATE);
+        SharedPreferences.Editor mEdit1 = sp.edit();
+
+        mEdit1.putInt("Status_size", arrayList.size());
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            mEdit1.putString("Note_Message" , String.valueOf(arrayList.get(i).getNote()));
+            mEdit1.putString("Note_Time" , String.valueOf(arrayList.get(i).getTime()));
+        }
+
+        mEdit1.apply();
+    }
+
+
+    public ArrayList<Notes> loadArray(Context mContext) {
+
+        ArrayList<Notes> notesArrayList =new ArrayList<>();
+        SharedPreferences mSharedPreference1 = getSharedPreferences("my_pref", MODE_PRIVATE);
+        arrayList.clear();
+        int size = mSharedPreference1.getInt("Status_size", 0);
+
+        for (int i = 0; i < size; i++) {
+            String notes_mesg = mSharedPreference1.getString("Note_Message", null);
+            String notes_time = mSharedPreference1.getString("Note_Time", null);
+
+            notesArrayList.add(new Notes(notes_mesg, notes_time));
+
+
+        }
+
+        return notesArrayList;
+    }
+
 }
