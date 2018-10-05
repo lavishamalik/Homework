@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/about"
+        android:title="ABOUT"
+        android:icon="@drawable/ic_action_name"
+        android:orderInCategory="2"/>
+    <item
+        android:id="@+id/settings"
+        android:title="SETTINGS"
+        android:icon="@drawable/ic_settings"
+        android:orderInCategory="4"/>
+    <item
+        android:id="@+id/refresh"
+        android:title="REFRESH"
+        android:icon="@drawable/ic_refresh"
+        android:orderInCategory="5"/>
+    <item
+        android:id="@+id/help"
+        android:title="HELP"
+        android:icon="@drawable/ic_help"
+        android:orderInCategory="3"/>
+    <item
+        android:id="@+id/Home"
+        android:title="HOME"
+        android:icon="@drawable/ic_home"
+        android:orderInCategory="1"/>
+</menu>
