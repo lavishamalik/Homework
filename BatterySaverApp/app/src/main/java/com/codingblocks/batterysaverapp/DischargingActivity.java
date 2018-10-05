@@ -14,7 +14,7 @@ public class DischargingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discharging);
         TextView textView=findViewById(R.id.tvlevel2);
-        textView.setText(getLevel()+"PERCENT");
+        textView.setText(getLevel()+" PERCENT");
     }
 
     public float getLevel()

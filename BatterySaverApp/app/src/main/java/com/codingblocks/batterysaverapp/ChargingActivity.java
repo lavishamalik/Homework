@@ -14,7 +14,7 @@ public class ChargingActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charging);
         TextView textView=findViewById(R.id.tvlevel1);
-        textView.setText(getLevel()+"PERCENT");
+        textView.setText(getLevel()+" PERCENT");
     }
     public float getLevel()
     {
