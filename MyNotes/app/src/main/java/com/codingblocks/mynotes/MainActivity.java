@@ -33,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
         et = findViewById(R.id.etNote);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-
-        arrayList= loadArray(this);
+        arrayList=loadArray(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         final NotesAdapter notesAdapter = new NotesAdapter(arrayList);
@@ -54,43 +53,33 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        saveArray();
         super.onStop();
+        saveArray();
     }
 
-
-    public void saveArray() {
-        SharedPreferences sp = getSharedPreferences("my_pref", MODE_PRIVATE);
-        SharedPreferences.Editor mEdit1 = sp.edit();
-
-        mEdit1.putInt("Status_size", arrayList.size());
-
-        for (int i = 0; i < arrayList.size(); i++) {
-            mEdit1.putString("Note_Message" , String.valueOf(arrayList.get(i).getNote()));
-            mEdit1.putString("Note_Time" , String.valueOf(arrayList.get(i).getTime()));
+    private void saveArray() {
+        SharedPreferences sharedPreferences=getSharedPreferences("Mypref",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putInt("SIZE",arrayList.size());
+        for(int i=0;i<arrayList.size();i++)
+        {
+            editor.putString("NOTES",arrayList.get(i).getNote());
+            editor.putString("TIME",arrayList.get(i).getTime());
         }
-
-        mEdit1.apply();
+        editor.apply();
     }
 
-
-    public ArrayList<Notes> loadArray(Context mContext) {
-
-        ArrayList<Notes> notesArrayList =new ArrayList<>();
-        SharedPreferences mSharedPreference1 = getSharedPreferences("my_pref", MODE_PRIVATE);
-        arrayList.clear();
-        int size = mSharedPreference1.getInt("Status_size", 0);
-
-        for (int i = 0; i < size; i++) {
-            String notes_mesg = mSharedPreference1.getString("Note_Message", null);
-            String notes_time = mSharedPreference1.getString("Note_Time", null);
-
-            notesArrayList.add(new Notes(notes_mesg, notes_time));
-
-
+    private ArrayList<Notes> loadArray(Context context)
+    {
+        ArrayList<Notes>answer=new ArrayList<>();
+        SharedPreferences sharedPreferences=getSharedPreferences("Mypref",MODE_PRIVATE);
+        int size=sharedPreferences.getInt("SIZE",0);
+        for(int i=0;i<size;i++)
+        {
+            String note=sharedPreferences.getString("NOTES",null);
+            String time=sharedPreferences.getString("TIME",null);
+            answer.add(new Notes(note,time));
         }
-
-        return notesArrayList;
+        return answer;
     }
-
 }
